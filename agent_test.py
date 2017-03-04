@@ -244,7 +244,7 @@ class Project1Test(unittest.TestCase):
     #         "The heuristic function should return a floating point")
 
     timeout(5)
-    #@unittest.skip("Skip simple minimax test.")  # Uncomment this line to skip test
+    # @unittest.skip("Skip simple minimax test.")  # Uncomment this line to skip test
     def test_minimax_interface(self):
         """ Test CustomPlayer.minimax interface with simple input """
         h, w = 7, 7  # board size
@@ -274,8 +274,8 @@ class Project1Test(unittest.TestCase):
                              "point value approximating the score for the " +
                              "branch being searched."))
 
-    timeout(5)
-    #@unittest.skip("Skip alphabeta test.")  # Uncomment this line to skip test
+    @timeout(5)
+    # @unittest.skip("Skip alphabeta test.")  # Uncomment this line to skip test
     def test_alphabeta_interface(self):
         """ Test CustomPlayer.alphabeta interface with simple input """
         h, w = 9, 9  # board size
@@ -357,7 +357,7 @@ class Project1Test(unittest.TestCase):
                        "next move. The move must be one of the legal moves " +
                        "on the current game board."))
 
-    # @timeout(5)
+    @timeout(5)
     # @unittest.skip("Skip minimax test.")  # Uncomment this line to skip test
     def test_minimax(self):
         """ Test CustomPlayer.minimax
@@ -477,63 +477,63 @@ class Project1Test(unittest.TestCase):
                 method, test_depth, first_branch, move))
 
 
-    # @timeout(20)
+    @timeout(20)
     # @unittest.skip("Skip iterative deepening test.")  # Uncomment this line to skip test
-    # def test_get_move(self):
-    #     """ Test iterative deepening in CustomPlayer.get_move by placing an
-    #     agent on the game board and performing ID minimax search, which
-    #     should visit a specific number of unique nodes while expanding. By
-    #     forcing the search to timeout when a predetermined number of nodes
-    #     have been expanded, we can then verify that the expected number of
-    #     unique nodes have been visited.
-    #     """
+    def test_get_move(self):
+        """ Test iterative deepening in CustomPlayer.get_move by placing an
+        agent on the game board and performing ID minimax search, which
+        should visit a specific number of unique nodes while expanding. By
+        forcing the search to timeout when a predetermined number of nodes
+        have been expanded, we can then verify that the expected number of
+        unique nodes have been visited.
+        """
 
-    #     class DynamicTimer():
-    #         """Dynamic Timer allows the time limit to be changed after the
-    #         timer is initialized so that the search timeout can be triggered
-    #         before the timer actually expires. This allows the timer to expire
-    #         when an event occurs, regardless of the clock time required until
-    #         the event happens.
-    #         """
-    #         def __init__(self, time_limit):
-    #             self.time_limit = time_limit
-    #             self.start_time = curr_time_millis()
+        class DynamicTimer():
+            """Dynamic Timer allows the time limit to be changed after the
+            timer is initialized so that the search timeout can be triggered
+            before the timer actually expires. This allows the timer to expire
+            when an event occurs, regardless of the clock time required until
+            the event happens.
+            """
+            def __init__(self, time_limit):
+                self.time_limit = time_limit
+                self.start_time = curr_time_millis()
 
-    #         def time_left(self):
-    #             return self.time_limit - (curr_time_millis() - self.start_time)
+            def time_left(self):
+                return self.time_limit - (curr_time_millis() - self.start_time)
 
-    #     w, h = 11, 11  # board size
-    #     adversary_location = (0, 0)
-    #     method = "minimax"
+        w, h = 11, 11  # board size
+        adversary_location = (0, 0)
+        method = "minimax"
 
-    #     # The agent under test starts at the positions indicated below, and
-    #     # performs an iterative deepening minimax search (minimax is easier to
-    #     # test because it always visits all nodes in the game tree at every
-    #     # level).
-    #     origins = [(2, 3), (6, 6), (7, 4), (4, 2), (0, 5), (10, 10)]
-    #     exact_counts = [(8, 8), (32, 10), (160, 39), (603, 35), (1861, 54), (3912, 62)]
+        # The agent under test starts at the positions indicated below, and
+        # performs an iterative deepening minimax search (minimax is easier to
+        # test because it always visits all nodes in the game tree at every
+        # level).
+        origins = [(2, 3), (6, 6), (7, 4), (4, 2), (0, 5), (10, 10)]
+        exact_counts = [(8, 8), (32, 10), (160, 39), (603, 35), (1861, 54), (3912, 62)]
 
-    #     for idx in range(len(origins)):
+        for idx in range(len(origins)):
 
-    #         # set the initial timer high enough that the search will not
-    #         # timeout before triggering the dynamic timer to halt by visiting
-    #         # the expected number of nodes
-    #         time_limit = 1e4
-    #         timer = DynamicTimer(time_limit)
-    #         eval_fn = makeEvalStop(exact_counts[idx][0], timer, time_limit)
-    #         agentUT, board = self.initAUT(-1, eval_fn, True, method,
-    #                                       origins[idx], adversary_location,
-    #                                       w, h)
-    #         legal_moves = board.get_legal_moves()
-    #         chosen_move = agentUT.get_move(board, legal_moves, timer.time_left)
+            # set the initial timer high enough that the search will not
+            # timeout before triggering the dynamic timer to halt by visiting
+            # the expected number of nodes
+            time_limit = 1e4
+            timer = DynamicTimer(time_limit)
+            eval_fn = makeEvalStop(exact_counts[idx][0], timer, time_limit)
+            agentUT, board = self.initAUT(-1, eval_fn, True, method,
+                                          origins[idx], adversary_location,
+                                          w, h)
+            legal_moves = board.get_legal_moves()
+            chosen_move = agentUT.get_move(board, legal_moves, timer.time_left)
 
-    #         diff_total = abs(board.counts[0] - exact_counts[idx][0])
-    #         diff_unique = abs(board.counts[1] - exact_counts[idx][1])
+            diff_total = abs(board.counts[0] - exact_counts[idx][0])
+            diff_unique = abs(board.counts[1] - exact_counts[idx][1])
 
-    #         self.assertTrue(diff_total <= 1 and diff_unique == 0, ID_FAIL)
+            self.assertTrue(diff_total <= 1 and diff_unique == 0, ID_FAIL)
 
-    #         self.assertTrue(chosen_move in legal_moves, INVALID_MOVE.format(
-    #             legal_moves, chosen_move))
+            self.assertTrue(chosen_move in legal_moves, INVALID_MOVE.format(
+                legal_moves, chosen_move))
 
 
 if __name__ == '__main__':

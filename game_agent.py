@@ -87,24 +87,42 @@ class CustomPlayer:
         
         self.time_left = time_left
  
-        # by default, we will pick the middle move? maybe do random here?
-        defaultMove = legal_moves[len(legal_moves)//2]
+        # by default, we will pick the middle move?
+        move = legal_moves[len(legal_moves)//2]
 
         # check if we are at the start of the game
         totalAvailable = game.height * game.width
         if totalAvailable == len(legal_moves):
-            return defaultMove
+            return move
     
         try:
-            score, move = self.minimax(game, self.search_depth)
             
+            depth = self.search_depth
+
+            if self.iterative:
+                lowerBound = 0
+                upperBound = 2000 # what should this bound be?
+            else:
+                lowerBound = self.search_depth
+                upperBound = self.search_depth + 1
+
+            for i in range(lowerBound, upperBound):
+                
+                if self.method == 'minimax':
+                    score, move = self.minimax(game, i)
+                elif self.method == 'alphabeta':
+                    score, move = self.alphabeta(game, i)
+
             return move
 
         except Timeout:
-            return defaultMove
+            return move
 
     def minimax(self, game, depth, maximizing_player=True):
         
+        if self.time_left() < self.TIMER_THRESHOLD:
+            raise Timeout()
+
         if (depth == 0):
             return self.score(game, self), (-1,-1)
             
@@ -129,53 +147,11 @@ class CustomPlayer:
                     move = m
             return v, move
 
-        # if self.time_left() < self.TIMER_THRESHOLD:
-        #     raise Timeout()
-
     def alphabeta(self, game, depth, alpha=float("-inf"), beta=float("inf"), maximizing_player=True):
-        """Implement minimax search with alpha-beta pruning as described in the
-        lectures.
 
-        Parameters
-        ----------
-        game : isolation.Board
-            An instance of the Isolation game `Board` class representing the
-            current game state
-
-        depth : int
-            Depth is an integer representing the maximum number of plies to
-            search in the game tree before aborting
-
-        alpha : float
-            Alpha limits the lower bound of search on minimizing layers
-
-        beta : float
-            Beta limits the upper bound of search on maximizing layers
-
-        maximizing_player : bool
-            Flag indicating whether the current search depth corresponds to a
-            maximizing layer (True) or a minimizing layer (False)
-
-        Returns
-        -------
-        float
-            The score for the current search branch
-
-        tuple(int, int)
-            The best move for the current branch; (-1, -1) for no legal moves
-
-        Notes
-        -----
-            (1) You MUST use the `self.score()` method for board evaluation
-                to pass the project unit tests; you cannot call any other
-                evaluation function directly.
-        """
-        # find the move that results in highest score
-        
-        # print("\nalpha beta with depth", depth,"active player:",game.active_player)
-        # print(game.to_string())
-        # input("press enter to continue")
-
+        if self.time_left() < self.TIMER_THRESHOLD:
+            raise Timeout()
+            
         if (depth == 0):
             return self.score(game, self), (-1,-1)
             
@@ -207,29 +183,3 @@ class CustomPlayer:
                 beta = min(beta,v)
 
             return v, move
-
-    def __maximize_alphabeta__(self, game, depth, alpha, beta):
-        if (depth == 1):
-            return self.score(game, game.active_player)
-
-        v = float("-inf")
-
-        for m in game.get_legal_moves():
-            v = max(v, self.__minimize_alphabeta__(game.forecast_move(m),depth-1,alpha,beta))
-            if v >= beta: 
-                return v
-            alpha = max(alpha, v)
-        return v
-    
-    def __minimize_alphabeta__(self, game, depth, alpha, beta):
-        if (depth == 1):
-            return self.score(game, game.inactive_player)
-
-        v = float("inf")
-
-        for m in game.get_legal_moves():
-            v = min(v, self.__maximize_alphabeta__(game.forecast_move(m),depth-1,alpha,beta))
-            if v <= alpha:
-                return v
-            beta = min(beta, v)
-        return v
