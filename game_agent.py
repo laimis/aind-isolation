@@ -36,10 +36,16 @@ def custom_score(game, player):
     float
         The heuristic value of the current game state to the specified player.
     """
+    if game.is_winner(player):
+        return float("inf")
+    
+    if game.is_loser(player):
+        return float("-inf")
 
-    # TODO: finish this function!
-    raise NotImplementedError
+    return number_of_legal_moves(game, player)
 
+def number_of_legal_moves(game, player):
+    return float(len(game.get_legal_moves(player)))
 
 class CustomPlayer:
     """Game-playing agent that chooses a move using your evaluation function

@@ -227,21 +227,21 @@ class Project1Test(unittest.TestCase):
         board.apply_move(loc2)
         return agentUT, board
 
-    # @timeout(5)
+    @timeout(5)
     # @unittest.skip("Skip eval function test.")  # Uncomment this line to skip test
-    # def test_heuristic(self):
-    #     """ Test output interface of heuristic score function interface."""
+    def test_heuristic(self):
+        """ Test output interface of heuristic score function interface."""
 
-    #     player1 = "Player1"
-    #     player2 = "Player2"
-    #     p1_location = (0, 0)
-    #     p2_location = (1, 1)  # top left corner
-    #     game = isolation.Board(player1, player2)
-    #     game.apply_move(p1_location)
-    #     game.apply_move(p2_location)
+        player1 = "Player1"
+        player2 = "Player2"
+        p1_location = (0, 0)
+        p2_location = (1, 1)  # top left corner
+        game = isolation.Board(player1, player2)
+        game.apply_move(p1_location)
+        game.apply_move(p2_location)
 
-    #     self.assertIsInstance(game_agent.custom_score(game, player1), float,
-    #         "The heuristic function should return a floating point")
+        self.assertIsInstance(game_agent.custom_score(game, player1), float,
+            "The heuristic function should return a floating point")
 
     timeout(5)
     # @unittest.skip("Skip simple minimax test.")  # Uncomment this line to skip test
