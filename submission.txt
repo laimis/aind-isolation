@@ -1,0 +1,35 @@
+Rubric:
+
+2. Have at least three (3) evaluation heuristics besides null_score(), open_move_score(), and improved_score() been implemented and analyzed?
+
+3. Has the performance of agents against the testing agents been adequately described?
+
+A brief report lists (using a table and any appropriate visualizations) and verbally describes the performance of agents using the implemented evaluation functions. Performance data includes results from tournament.py comparing (at a minimum) the best performing student heuristic against the ID_Improved agent.
+
+4. Does the report make a recommendation about the best evaluation function, and is this recommendation adequately justified?
+
+The report makes a recommendation about which evaluation function should be used and justifies the recommendation with at least three reasons supported by the data.
+
+- Submit the code file: game_agent.py
+
+- For each of your three custom heuristic functions, evaluate the performance of the heuristic using the included tournament.py script. Then write up a brief summary of your results, describing the performance of the agent using the different heuristic functions verbally and using appropriate visualizations.
+
+- Submit your analysis as: heuristic_analysis.pdf
+
+
+
+Submit your work by uploading a .zip file containing all your work, which must include the following files:
+
+game_agent.py
+heuristic_analysis.pdf
+research_review.pdf
+
+
+COMPLETE:
+
+1. Is adversarial search correctly implemented using iterative deepening, minimax, and alpha-beta pruning?
+
+5. Completeness. The write up is approximately 1 page (500 words) and includes a summary of the paper (including new techniques introduced), and the key results (if any) that were achieved.
+
++ A brief summary of the paper's goals or techniques introduced (if any).
++ A brief summary of the paper's results (if any).

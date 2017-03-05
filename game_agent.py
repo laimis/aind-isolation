@@ -42,10 +42,30 @@ def custom_score(game, player):
     if game.is_loser(player):
         return float("-inf")
 
-    return number_of_legal_moves(game, player)
+    # heuristic = open_moves(game,player)
+    heuristic = open_own_vs_opponent(game,player)
+    heuristic = heuristic + position_score(game,player)
 
-def number_of_legal_moves(game, player):
+    return heuristic
+
+def position_score(game,player):
+
+    pos = game.get_player_location(player)
+
+    mp = game.width // 2
+    maxDistance = game.width - 1
+
+    delta = abs(pos[0]-mp) + abs(pos[1]-mp)
+
+    return 1 - delta / maxDistance
+
+def open_moves(game,player):
     return float(len(game.get_legal_moves(player)))
+
+def open_own_vs_opponent(game,player):
+    own_moves = len(game.get_legal_moves(player))
+    opp_moves = len(game.get_legal_moves(game.get_opponent(player)))
+    return float(own_moves - opp_moves)
 
 class CustomPlayer:
     """Game-playing agent that chooses a move using your evaluation function
