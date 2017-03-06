@@ -14,43 +14,25 @@ class Timeout(Exception):
     pass
 
 
+infinity = float("inf")
+neg_infinity = float("-inf")
+
 def custom_score(game, player):
-    """Calculate the heuristic value of a game state from the point of view
-    of the given player.
-
-    Note: this function should be called from within a Player instance as
-    `self.score()` -- you should not need to call this function directly.
-
-    Parameters
-    ----------
-    game : `isolation.Board`
-        An instance of `isolation.Board` encoding the current state of the
-        game (e.g., player locations and blocked cells).
-
-    player : object
-        A player instance in the current game (i.e., an object corresponding to
-        one of the player objects `game.__player_1__` or `game.__player_2__`.)
-
-    Returns
-    -------
-    float
-        The heuristic value of the current game state to the specified player.
-    """
     if game.is_winner(player):
-        return float("inf")
+        return infinity
     
     if game.is_loser(player):
-        return float("-inf")
-
-    # heuristic = open_moves(game,player)
-    heuristic = open_own_vs_opponent(game,player)
-    heuristic = heuristic + position_score(game,player)
-
-    return heuristic
-
-def position_score(game,player):
+        return neg_infinity
 
     pos = game.get_player_location(player)
+
+    heuristic = open_own_vs_opponent(game,player)
+    heuristic = heuristic + position_score(game,player,pos)
+
+    # print(" ",player,heuristic,"at",pos)
+    return heuristic
+
+def position_score(game,player,pos):
 
     mp = game.width // 2
     maxDistance = game.width - 1
@@ -58,9 +40,6 @@ def position_score(game,player):
     delta = abs(pos[0]-mp) + abs(pos[1]-mp)
 
     return 1 - delta / maxDistance
-
-def open_moves(game,player):
-    return float(len(game.get_legal_moves(player)))
 
 def open_own_vs_opponent(game,player):
     own_moves = len(game.get_legal_moves(player))
@@ -121,28 +100,44 @@ class CustomPlayer:
         if totalAvailable == len(legal_moves):
             return move
     
+        lowerBound = self.search_depth
+        upperBound = self.search_depth + 1
+        currentDepth = 0
+
+        bestScore = neg_infinity
+        bestMove = (-1,-1)
+
         try:
             
             depth = self.search_depth
 
             if self.iterative:
                 lowerBound = 0
-                upperBound = 2000 # what should this bound be?
-            else:
-                lowerBound = self.search_depth
-                upperBound = self.search_depth + 1
-
+                upperBound = 1000 # what should this bound be?
+            
             for i in range(lowerBound, upperBound):
-                
+                currentDepth = i
                 if self.method == 'minimax':
                     score, move = self.minimax(game, i)
                 elif self.method == 'alphabeta':
                     score, move = self.alphabeta(game, i)
 
-            return move
+                # print("depth:",currentDepth,"score",score,"compared against best",move)
+                
+                if score > bestScore and currentDepth != 0:
+                    bestMove = move
+                    bestScore = score
+
+                if score == infinity:
+                    break
+
+            print("returning",bestMove,"with score", bestScore,"depth achieved",currentDepth)
+            
+            return bestMove
 
         except Timeout:
-            return move
+            print("timeout",bestMove,"with score",bestScore,"depth achieved",currentDepth-1)
+            return bestMove
 
     def minimax(self, game, depth, maximizing_player=True):
         
@@ -153,7 +148,7 @@ class CustomPlayer:
             return self.score(game, self), (-1,-1)
             
         if maximizing_player:
-            v = float("-inf")
+            v = neg_infinity
             move = (-1, -1)
 
             for m in game.get_legal_moves():
@@ -163,7 +158,7 @@ class CustomPlayer:
                     move = m
             return v, move
         else:
-            v = float("inf")
+            v = infinity
             move = (-1, -1)
 
             for m in game.get_legal_moves():
@@ -182,7 +177,7 @@ class CustomPlayer:
             return self.score(game, self), (-1,-1)
             
         if maximizing_player:
-            v = float("-inf")
+            v = neg_infinity
             move = (-1, -1)
 
             for m in game.get_legal_moves():
@@ -196,7 +191,7 @@ class CustomPlayer:
 
             return v, move
         else:
-            v = float("inf")
+            v = infinity
             move = (-1, -1)
 
             for m in game.get_legal_moves():

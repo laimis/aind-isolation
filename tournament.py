@@ -33,7 +33,8 @@ from sample_players import improved_score
 from game_agent import CustomPlayer
 from game_agent import custom_score
 
-NUM_MATCHES = 5  # number of matches against each opponent
+NUM_MATCHES = 150  # number of matches against each opponent
+# NUM_MATCHES = 5  # number of matches against each opponent
 TIME_LIMIT = 150  # number of milliseconds before timeout
 
 TIMEOUT_WARNING = "One or more agents lost a match this round due to " + \
@@ -162,23 +163,26 @@ def main():
     # faster or slower computers.
     test_agents = [Agent(CustomPlayer(score_fn=improved_score, **CUSTOM_ARGS), "ID_Improved"),
                    Agent(CustomPlayer(score_fn=custom_score, **CUSTOM_ARGS), "Student")]
-
-    # test_agents = [Agent(CustomPlayer(score_fn=custom_score, **CUSTOM_ARGS), "Student")]
-
+    
     print(DESCRIPTION)
-    for agentUT in test_agents:
-        print("")
-        print("*************************")
-        print("{:^25}".format("Evaluating: " + agentUT.name))
-        print("*************************")
 
-        agents = random_agents + mm_agents + ab_agents + [agentUT]
-        win_ratio = play_round(agents, NUM_MATCHES)
+    win_ratio = play_round(test_agents, NUM_MATCHES)
+    print("\n\nResults:")
+    print("----------")
+    print("{!s:<15}{:>10.2f}%".format(test_agents[1].name, win_ratio))
 
-        print("\n\nResults:")
-        print("----------")
-        print("{!s:<15}{:>10.2f}%".format(agentUT.name, win_ratio))
+    # for agentUT in test_agents:
+    #     print("")
+    #     print("*************************")
+    #     print("{:^25}".format("Evaluating: " + agentUT.name))
+    #     print("*************************")
 
+    #     agents = random_agents + mm_agents + ab_agents + [agentUT]
+    #     win_ratio = play_round(agents, NUM_MATCHES)
+
+    #     print("\n\nResults:")
+    #     print("----------")
+    #     print("{!s:<15}{:>10.2f}%".format(agentUT.name, win_ratio))
 
 if __name__ == "__main__":
     main()
