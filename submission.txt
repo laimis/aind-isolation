@@ -1,28 +1,49 @@
+-- hmm check if stay away from the walls is not penalizing too much
+
 Rubric:
 
 2. Have at least three (3) evaluation heuristics besides null_score(), open_move_score(), and improved_score() been implemented and analyzed?
 
-3. Has the performance of agents against the testing agents been adequately described?
+I went with three heuristics that used open moves - open opponent moves augmented with additonal scores. The scores were
+
+- stay away from the walls
+- stay close to open fields
+- combination of the two
+
+"Stay away from the walls" calculated a score between 0 and 1 indicating how close to the center the move is. The idea here is that if we find multiple squares with advantagous move positions (number of own moves is larger than opponent moves) then we pick one that is more away from the wall. Wall limits our moves down the road.
+
+"Stay close to open fields" calculates a score between 0 and 1 that indicates how close to all the open squares on the board the position is. The idea here is to try and hang around the areas that are very open giving us more moves. So I combine that with open moves - opponent open moves and in case equal positions are found, this score is added to break a tie and a tile closer to the open fields wins.
+
+The best performer was X. When running 400 simulations of ID_Improved and Student agents against the test agents, the stay away from the walls approach won the most games. When pitted head to head against the ID_Improved, it also shown a slight improvement. Increasing the number of games just increased the winning percentage:
+
+400 games
+600 games
+1000 games
+
+<A table showing how ID did vs Student against the same opponent>
+
+I couldn't help but wonder if the next best approach would be to create an end game move book, keep it small by relying on the symmetry of the board and then put that into play once the game starts to approach the end. Time permitting might build one before submitted the agent for the competition.
+
+
++ 3. Has the performance of agents against the testing agents been adequately described?
 
 A brief report lists (using a table and any appropriate visualizations) and verbally describes the performance of agents using the implemented evaluation functions. Performance data includes results from tournament.py comparing (at a minimum) the best performing student heuristic against the ID_Improved agent.
 
-4. Does the report make a recommendation about the best evaluation function, and is this recommendation adequately justified?
++ 4. Does the report make a recommendation about the best evaluation function, and is this recommendation adequately justified?
 
 The report makes a recommendation about which evaluation function should be used and justifies the recommendation with at least three reasons supported by the data.
 
-- Submit the code file: game_agent.py
++ Submit the code file: game_agent.py
 
-- For each of your three custom heuristic functions, evaluate the performance of the heuristic using the included tournament.py script. Then write up a brief summary of your results, describing the performance of the agent using the different heuristic functions verbally and using appropriate visualizations.
++ For each of your three custom heuristic functions, evaluate the performance of the heuristic using the included tournament.py script. Then write up a brief summary of your results, describing the performance of the agent using the different heuristic functions verbally and using appropriate visualizations.
 
 - Submit your analysis as: heuristic_analysis.pdf
 
-
-
 Submit your work by uploading a .zip file containing all your work, which must include the following files:
 
-game_agent.py
+- game_agent.py
 heuristic_analysis.pdf
-research_review.pdf
++ research_review.pdf
 
 
 COMPLETE:
