@@ -120,6 +120,17 @@ Results:
 ----------
 Student             59.50%
 
+Tried 1000 games:
+
+Playing Matches:
+----------
+  Match 1:   Student   vs ID_Improved   Result: 546 to 454
+
+
+Results:
+----------
+Student             54.60%
+
 ### combination of the above: prefer away from the walls and the closest to the open fields.
 
 *************************
